@@ -1,7 +1,7 @@
 // 读写二进制文件
 // 参考资料
 // [fopen , fread fwrite 函数读写二进制文件 问题总结](https://blog.csdn.net/zangyuanan320/article/details/51582260)
-#include<stdio.h>
+#include <stdio.h>
 
 /*
 * 函数说明: 写二进制文件
@@ -13,14 +13,15 @@
 *           -1, 失败
 *
 */
-int writeFile(const char* fileName, void* buf, int bufLen)
+int writeFile(const char *fileName, void *buf, int bufLen)
 {
-    FILE * fp = NULL;
-    if( NULL == buf || bufLen <= 0 ) return (-1);
+    FILE *fp = NULL;
+    if (NULL == buf || bufLen <= 0)
+        return (-1);
 
     fp = fopen(fileName, "wb"); // 必须确保是以 二进制写入的形式打开
 
-    if( NULL == fp )
+    if (NULL == fp)
     {
         return (-1);
     }
@@ -30,7 +31,29 @@ int writeFile(const char* fileName, void* buf, int bufLen)
     fclose(fp);
     fp = NULL;
 
-    return 0;    
+    return 0;
+}
+
+// 写入文本
+int writeFile2(const char *fileName)
+{
+    FILE *fp = NULL;
+    int i = 0;
+
+    fp = fopen(fileName, "w");
+
+    if (NULL == fp)
+    {
+        return (-1);
+    }
+    char c = 'a';
+    for (i = 0; i < 10; i++)
+        fprintf(fp, "%d\n",c);
+
+    fclose(fp);
+    fp = NULL;
+
+    return 0;
 }
 
 /*
@@ -43,32 +66,36 @@ int writeFile(const char* fileName, void* buf, int bufLen)
 *             -1, 失败
 *
 */
-int readFile(const char* fileName, void* buf, int bufLen)
+int readFile(const char *fileName, void *buf, int bufLen)
 {
-    FILE* fp = NULL;
+    FILE *fp = NULL;
     int i;
-    if( NULL == buf || bufLen <= 0 ) return (-1);
+    if (NULL == buf || bufLen <= 0)
+        return (-1);
 
     fp = fopen(fileName, "rb"); // 必须确保是以 二进制读取的形式打开
 
-    if( NULL == fp )
+    if (NULL == fp)
     {
         return (-1);
     }
 
     fread(buf, bufLen, 1, fp); // 二进制读
 
-   for(i=0;i<bufLen;i++)
-      printf("%u\n",*(((unsigned char*)buf)+i));
+    for (i = 0; i < bufLen; i++)
+        printf("%u\n", *(((unsigned char *)buf) + i));
     fclose(fp);
-    return 0;        
+    return 0;
 }
 
 int main()
 {
-  const char* filename="file.txt";
-  unsigned char buf[5] ={1,2,3,4,5};
-   writeFile(filename,buf,5);
-   readFile(filename,buf,5);
-   return 0;
+    const char *filename = "file.txt";
+    unsigned char buf[5] = {1, 2, 3, 4, 5};
+    writeFile(filename, buf, 5);
+    readFile(filename, buf, 5);
+
+    const char *filename2 = "file2.txt";
+    writeFile2(filename2);
+    return 0;
 }
