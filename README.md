@@ -1,2 +1,3 @@
-# template-project
-项目模板
+# C
+
+C 语言学习笔记
